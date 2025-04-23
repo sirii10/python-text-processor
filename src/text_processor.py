@@ -1,3 +1,4 @@
+import sys
 def read_file(file_path):
     """Read text from a file."""
     try:
@@ -54,28 +55,31 @@ def write_results(results, output_file):
 #     return False
 
 def main(input_file="input.txt", output_file="output.txt"):
-    """Main function to process a text file interactively."""
     print("Welcome to the Python Text Processor!")
     print(f"Current input file: {input_file}")
-    
-    choice = input("Do you want to edit the input file content? (y/n): ").strip().lower()
-    if choice == 'y':
-        new_content = []
-        print("Enter the new content line by line (type 'DONE' to finish):")
-        while True:
-            line = input()
-            if line.strip().upper() == 'DONE':
-                break
-            new_content.append(line)
-        
-        try:
-            with open(input_file, 'w') as f:
-                f.write('\n'.join(new_content))
-            print("Input file updated successfully.")
-        except Exception as e:
-            print(f"Error updating file: {e}")
-            return False
 
+    # Check if the script is being run in an interactive environment
+    if sys.stdin.isatty():  # Only true if running in terminal
+        choice = input("Do you want to edit the input file content? (y/n): ").strip().lower()
+        if choice == 'y':
+            new_content = []
+            print("Enter the new content line by line (type 'DONE' to finish):")
+            while True:
+                line = input()
+                if line.strip().upper() == 'DONE':
+                    break
+                new_content.append(line)
+            try:
+                with open(input_file, 'w') as f:
+                    f.write('\n'.join(new_content))
+                print("Input file updated successfully.")
+            except Exception as e:
+                print(f"Error updating file: {e}")
+                return False
+    else:
+        print("Non-interactive mode detected. Skipping input prompts...")
+
+    # Continue processing
     text = read_file(input_file)
     if text:
         results = process_text(text)
@@ -84,7 +88,6 @@ def main(input_file="input.txt", output_file="output.txt"):
             if success:
                 print(f"Processing complete. Results written to {output_file}")
                 return True
-    
     print("Processing failed.")
     return False
 
