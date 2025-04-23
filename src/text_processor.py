@@ -39,8 +39,43 @@ def write_results(results, output_file):
         print(f"Error writing to file: {e}")
         return False
 
+# def main(input_file="input.txt", output_file="output.txt"):
+#     """Main function to process a text file."""
+#     text = read_file(input_file)
+#     if text:
+#         results = process_text(text)
+#         if results:
+#             success = write_results(results, output_file)
+#             if success:
+#                 print(f"Processing complete. Results written to {output_file}")
+#                 return True
+    
+#     print("Processing failed.")
+#     return False
+
 def main(input_file="input.txt", output_file="output.txt"):
-    """Main function to process a text file."""
+    """Main function to process a text file interactively."""
+    print("Welcome to the Python Text Processor!")
+    print(f"Current input file: {input_file}")
+    
+    choice = input("Do you want to edit the input file content? (y/n): ").strip().lower()
+    if choice == 'y':
+        new_content = []
+        print("Enter the new content line by line (type 'DONE' to finish):")
+        while True:
+            line = input()
+            if line.strip().upper() == 'DONE':
+                break
+            new_content.append(line)
+        
+        try:
+            with open(input_file, 'w') as f:
+                f.write('\n'.join(new_content))
+            print("Input file updated successfully.")
+        except Exception as e:
+            print(f"Error updating file: {e}")
+            return False
+
     text = read_file(input_file)
     if text:
         results = process_text(text)
